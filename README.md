@@ -2,7 +2,11 @@
 
 **A geometric-wavelet hybrid framework for smooth and robust quantum control**
 
----
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+
+> ⚠️ **Work in Progress**: This repository presents an **ongoing research project**.  
+> Only partial code and concepts are currently visible for public review.
+
 
 ![Concept Diagram](https://i.imgur.com/nL9P1ot.png)
 
@@ -81,4 +85,9 @@ The control optimization proceeds as an iterative feedback loop between the **re
 ## 📬 Contact
 
 For questions or collaboration inquiries, feel free to reach out via [wenzheng.dong.quantum@gmail.com] or connect on [LinkedIn](https://www.linkedin.com/in/wenzheng-dong).
+
+
+## 📄 License
+
+This project is licensed under the terms of the [MIT License](./LICENSE).
 
