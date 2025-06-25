@@ -175,7 +175,7 @@ def plot_2D_tantrix(tantrix_data, plt_title = '2D tantrix', curve_data =None, cu
         ax4.legend()    
 
 
-def plot_3D_tantrix(tantrix_data, plt_title = '3D tantrix',  curvatureS_data = None):
+def plot_3D_tantrix(tantrix_data, plt_title = '3D tantrix', curve_data =None, curvatureS_data = None):
     """
     A function to plot the 3d curve:
 
@@ -376,6 +376,7 @@ def plot_rickerWVs(jk_list, coeff_list=None, T_i=0,T_f=10, plt_title = 'Ricker W
 # ========================================================================================================
 # ========================================================================================================
 # ========================================================================================================
+
 
 
 

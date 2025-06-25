@@ -558,23 +558,6 @@ def geometry_smoothier(geometry, T_i,T_f):
     return _interp( np.linspace(T_i, T_f, len(geometry)) )
 
 
-
-
-# sequence_generation with fixed end_points and mean
-def sequence_gen_end_mean_fixed(a,b,mean,N):
-    """
-    Input: a:    initial point  
-           b:    end point 
-           mean: the mean of the sequece generated
-           N:    length of sequence
-    This is a double piece-wise sequence generation with fixed ini/end points a,b, and mean.
-    make the point:= (4*mean-a-b)/2 
-         the sequence will be one piece in [a, point] and another [point, b] 
-         <sequence> ~= mean 
-    """
-    m = (4*N-a-b)/2
-    return np.concatenate([np.linspace(a,m, N//2),   np.linspace(m,b, N-N//2)])
-
 ############################################################
 ###       Ansatz curves: from R(t) to r(t)  
 ############################################################
@@ -656,7 +639,6 @@ class Curvelet():
         * Logic enforcer: enforce 1) initial cond  2) target_unit
     """
     def __init__(self, ansatz , T_i, T_f, pool_jk_initial = None, tol_leak= 0.1 , K=3, ini_lm_LEAK= 1.0, ini_lm_GATE = 10.0, seg_chop=10, N=1000) -> None:
-        self.ansatz = ansatz                                    # record the ansatz and fix it
         self.real_tantrix = ansatz                              # the normalized tantrix // dynamically changed in optimizer 💥💥💥💥 unless len(ansatz) ==1 
         self.pseudo_tantrix = None                              # the un_normed tantrix \tilde{r}(t) by lin.con. non-leakly (good) WVs \
                                                                 #  // dynamically changed in optimizer 
@@ -886,7 +868,7 @@ class Curvelet():
         self.real_tantrix = tantrix_normalizer(_real_tantrix) 
         return None
 
-    def real_curve_Logic_Enforcer(self, _k=0.05):
+    def real_curve_Logic_Enforcer(self, _k=0.1):
         """
         For the r_tantrix, apply the logic enforcer st
         1. r(0) = initial
@@ -899,25 +881,13 @@ class Curvelet():
         _2theta=np.arccos(self.target_ANGLE)                    # r(0).r(T) = cos(2theta) = dot == self.target_ANGLE
         _r_0 = np.array([0,1])                                  # r(0) gives y_dir
         _r_T = np.array([np.sin(_2theta), np.cos(_2theta)])     # r(T) gives target_gate
-        
-        #----------------------------------------
-        # logic enforcement & interpolation : 
-        #---------------------------------------- 
 
-        #//Simple intepolation
+        # logic enforcement & interpolation 
         r[0:int(_k*self.N), 0]     = np.linspace(_r_0[0], r[int(_k*self.N), 0], int(_k*self.N))   # interp x near t=0
         r[0:int(_k*self.N), 1]     = np.linspace(_r_0[1], r[int(_k*self.N), 1], int(_k*self.N))   # interp y near t=0
         r[int((1-_k)*self.N): , 0] = np.linspace(r[int((1-_k)*self.N), 0], _r_T[0], int(_k*self.N)) # interp x near t=T
         r[int((1-_k)*self.N): , 1] = np.linspace(r[int((1-_k)*self.N), 1], _r_T[1], int(_k*self.N)) # interp y near t=T
 
-        #// mean preserving interpolation
-        #mean_old_0 = np.mean(r[0:int(_k*self.N)],    axis=0)
-        #mean_old_T = np.mean(r[int((1-_k)*self.N):], axis=0)
-        #r[0:int(_k*self.N), 0]     = sequence_gen_end_mean_fixed(a=_r_0[0], b=r[int(_k*self.N),0] ,mean=mean_old_0[0], N=int(_k*self.N)) # interp x near t=0
-        #r[0:int(_k*self.N), 1]     = sequence_gen_end_mean_fixed(a=_r_0[1], b=r[int(_k*self.N),1] ,mean=mean_old_0[1], N=int(_k*self.N)) # interp x near t=0
-        #r[int((1-_k)*self.N): , 0] = sequence_gen_end_mean_fixed(a=r[int((1-_k)*self.N), 0], b=_r_T[0] ,mean=mean_old_T[0], N=int(_k*self.N)) # interp x near t=0
-        #r[int((1-_k)*self.N): , 0] = sequence_gen_end_mean_fixed(a=r[int((1-_k)*self.N), 0], b=_r_T[0] ,mean=mean_old_T[0], N=int(_k*self.N)) # interp x near
-        
         r[:, 0] = geometry_smoothier(geometry=r[:, 0], T_i=self.T_i, T_f= self.T_f )            # Smooth the tantrix avoid diverge curvature
         r[:, 1] = geometry_smoothier(geometry=r[:, 1], T_i=self.T_i, T_f= self.T_f )            # Smooth the tantrix avoid diverge curvature
 
@@ -981,13 +951,13 @@ class Curvelet():
                 #print("idx", idx, "leak=",leak_jk,"leak*coeff=","coeff=",self.pool_Cxy[idx, 0], leak_jk * self.pool_Cxy[idx, 0])
                 leak_makers_rnd_x = np.concatenate((leak_makers_rnd_x , self.pool_jk[idx] ) ) 
                 #self.pool_Cxy[idx,0] = penalty * self.tol_leak/leak_jk
-                self.pool_Cxy[idx,0] = 0.333* self.pool_Cxy[idx,0]
+                self.pool_Cxy[idx,0] = 0.5* self.pool_Cxy[idx,0]
 
             if abs(leak_jk * self.pool_Cxy[idx, 1]) > self.tol_leak:             #C-y
                 #leak_makers_rnd = np.append(leak_makers_rnd , np.array([self.pool_jk[idx]]) )
                 leak_makers_rnd_y = np.concatenate((leak_makers_rnd_y , self.pool_jk[idx] ) ) 
                 #self.pool_Cxy[idx,1] = penalty * self.tol_leak/leak_jk
-                self.pool_Cxy[idx,1] = 0.333* self.pool_Cxy[idx,1]
+                self.pool_Cxy[idx,1] = 0.5* self.pool_Cxy[idx,1]
         
         if leak_makers_rnd_x.size != 0:
             print('check a leak maker in x: ', leak_makers_rnd_x)
@@ -1127,8 +1097,7 @@ class Curvelet():
         """
         The error of the real tantrix @ now 
         """
-        _error =  tantrix_repeat_intg(real_tantrix= self.real_tantrix, T_i=self.T_i, T_f = self.T_f, K= self.K)
-        return np.round(_error, 4)
+        return tantrix_repeat_intg(real_tantrix= self.real_tantrix, T_i=self.T_i, T_f = self.T_f, K= self.K)
 
     def get_real_curve(self):
         """
