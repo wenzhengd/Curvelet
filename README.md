@@ -29,20 +29,20 @@ This hybrid offers both **interpretability** and **robustness**, allowing the co
 
 ## 🔧 Iterative Control Optimization Pipeline
 
-The control optimization proceeds as an iterative feedback loop between the **real tantrix space** and a **wavelet-based control manifold** \( \mathcal{M}_\mathcal{F} \). Here's a step-by-step view, as illustrated in the figure:
+The control optimization proceeds as an iterative feedback loop between the **real tantrix space** and a **wavelet-based control manifold** $ \mathcal{M}_\mathcal{F} $. Here's a step-by-step view, as illustrated in the figure:
 
-1. **Start with a real tantrix** \( r(t)^{(i)} \):  
+1. **Start with a real tantrix** $ r(t)^{(i)} $:  
    An initial control ansatz, constrained to be smooth and realistic.
 
 2. **Wavelet Expansion**:  
-   This control is expanded in the wavelet basis, mapping it onto the current manifold \( \mathcal{M}_\mathcal{F}^{(i)} \). This process reveals how well it resists decoherence by checking for **coherence leakage**.
+   This control is expanded in the wavelet basis, mapping it onto the current manifold $ \mathcal{M}_\mathcal{F}^{(i)} $. This process reveals how well it resists decoherence by checking for **coherence leakage**.
 
 3. **Leakage Check & Manifold Surgery** 🤖:  
    If significant decoherence is detected, a feedback mechanism:
    - Identifies leakage pathways.
-   - Expands the manifold to \( \mathcal{M}_\mathcal{F}^{(i+1)} \), accommodating more expressive wavelet functions to better approximate the ideal control.
+   - Expands the manifold to $ \mathcal{M}_\mathcal{F}^{(i+1)} $, accommodating more expressive wavelet functions to better approximate the ideal control.
 
-4. **Map & Normalize to Pseudo-Tantrix** \( \tilde{r}(t)^{(i)} \):  
+4. **Map & Normalize to Pseudo-Tantrix** $ \tilde{r}(t)^{(i)} $:  
    The improved wavelet solution is mapped back to a physically meaningful tantrix, through a pseudo tantrix transitionally , preserving smoothness.
 
 5. **Re-injection for Iteration**:  
