@@ -48,4 +48,37 @@ The control optimization proceeds as an iterative feedback loop between the **re
 5. **Re-injection for Iteration**:  
    The new tantrix is fed back for another cycle of wavelet projection and refinement.
 
-🔁 **This itera**
+🔁 **This iterative loop continues until the decoherence is sufficiently suppressed.**  
+🧠 **Convergence is not required**; useful, robust control paths can emerge in finite iterations.
+
+---
+
+## 📌 Highlights
+
+- **No bang-bang pulses** – Only smooth control trajectories compatible with experimental hardware.
+- **No blind numerics** – Analytical understanding through wavelet theory and geometric intuition.
+- **Adaptivity** – Feedback-driven control space expansion allows flexible, targeted improvements.
+
+---
+
+## 📂 Repository Contents
+
+- `curvelet_optimizer.py` – Main iterative control search implementation.
+- `wavelet_utils.py` – Tools for constructing and expanding wavelet manifolds.
+- `tantrix_geometry.py` – Geometric utilities for smooth curve parametrization.
+- `examples/` – Sample cases for various qubit dephasing environments.
+
+---
+
+## 📖 Suggested Reading
+
+- Wavelet transforms in quantum control and signal processing  
+- Geometric control theory in open quantum systems  
+- Coherence projection techniques in decoherence modeling
+
+---
+
+## 📬 Contact
+
+For questions or collaboration inquiries, feel free to reach out via [wenzheng.dong.quantum@gmail.com] or connect on [LinkedIn](https://www.linkedin.com/in/wenzheng-dong).
+
