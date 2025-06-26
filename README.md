@@ -67,10 +67,10 @@ The control optimization proceeds as an iterative feedback loop between the **re
 
 ## 📂 Repository Contents
 
-- `curvelet_optimizer.py` – Main iterative control search implementation.
-- `wavelet_utils.py` – Tools for constructing and expanding wavelet manifolds.
-- `tantrix_geometry.py` – Geometric utilities for smooth curve parametrization.
-- `examples/` – Sample cases for various qubit dephasing environments.
+- `Curvelet.py` – Main iterative control search implementation.
+- `wavelet_factory.py` – Tools for constructing and expanding wavelet functions.
+- `geometry_processor.py` – Geometric utilities for smooth curve parametrization.
+- `plot_Curvelet.py` – Visualization.
 
 ---
 
